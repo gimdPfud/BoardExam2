@@ -9,6 +9,8 @@ package com.teamname.demo2.dto;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @ToString
@@ -16,4 +18,10 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DetailDTO {
+    private Integer id;                 //일련번호
+    private String subject;             //제목
+    private String content;             //내용
+    private String author;              //작성자
+    private LocalDateTime regDate;      //등록일자
+    private LocalDateTime modDate;      //수정일자
 }
