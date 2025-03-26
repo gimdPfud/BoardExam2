@@ -37,9 +37,9 @@
                         </div>
 
                     </div><!--입력양식-->
-                    <div class="card-footer text-center">
+                    <div class="card-footer d-flex justify-content-between">
+                        <button type="button" th:onclick="|location.href='@{/list}'|" class="btn btn-secondary">목록</button>
                         <button type="submit" class="btn btn-success">등록</button>
-                        <button th:onclick="|location.href='@{/list}'|" class="btn btn-secondary">목록</button>
                     </div>
                 </div>
             </form>

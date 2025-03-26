@@ -21,6 +21,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 //주석 요렁
 //설명
 //todo : 앞으로 작업할 지시내용 적기
@@ -37,9 +39,26 @@ public class SearchService {
     /*목록*/
     public Page<ListDTO> list(Pageable pageable, String type, String keyword){
         int currentPage = pageable.getPageNumber()-1;
-        int limits = 10;
+        int limits = 5;
         Pageable temp = PageRequest.of(currentPage, limits, Sort.by(Sort.Direction.DESC,"id"));
-        Page<SearchEntity> entities = searchRepository.findAll(temp);
+
+        //todo 조건별 리스트
+        Page<SearchEntity> entities;
+        /*문자열 비교시 ==는 부정확... equal()을 쓰자.*/
+        if(type.equals("s")&&keyword!=null){
+            entities = searchRepository.sub(keyword,temp);
+        } else if (type.equals("c")&&keyword!=null) {
+            entities = searchRepository.con(keyword,temp);
+        } else if (type.equals("a")&&keyword!=null) {
+            entities = searchRepository.aut(keyword,temp);
+        } else if (type.equals("sc")&&keyword!=null) {
+            entities = searchRepository.subcon(keyword,temp);
+        } else if (type.equals("sca")&&keyword!=null) {
+            entities = searchRepository.searchAll(keyword,temp);
+        }else{
+            entities = searchRepository.findAll(temp);
+        }
+
         Page<ListDTO> listDTOS = entities.map(data -> modelMapper.map(data, ListDTO.class));
         return listDTOS;
     }
@@ -56,17 +75,30 @@ public class SearchService {
 
     /*삭제*/
     public void delete(Integer id){
+        searchRepository.deleteById(id);
         return;
     }
 
     /*상세보기*/
     public DetailDTO detail(Integer id){
-        return null;
+        try {
+            Optional<SearchEntity> searchEntity = searchRepository.findById(id);
+            DetailDTO dto = modelMapper.map(searchEntity, DetailDTO.class);
+            return dto;
+        } catch (Exception e) {
+            System.out.println("상세보기 오류");
+            return null;
+        }
     }
 
     /*수정*/
     public void modify(DetailDTO detailDTO){
-        return;
+        try {
+            SearchEntity searchEntity = modelMapper.map(detailDTO, SearchEntity.class);
+            searchRepository.save(searchEntity);
+        } catch (Exception e) {
+            System.out.println("수정 오류");
+        }
     }
 
 }

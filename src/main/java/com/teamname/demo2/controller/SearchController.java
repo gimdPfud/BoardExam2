@@ -40,9 +40,10 @@ public class SearchController {
 
         Page<ListDTO> listDTOS = searchService.list(pageable, type, keyword);
         Map<String, Integer> pageInfo = Pagination(listDTOS);
-        model.addAllAttributes(pageInfo);
         model.addAttribute("list",listDTOS);
         model.addAttribute("keyword",keyword);
+        model.addAttribute("type",type);
+        model.addAllAttributes(pageInfo);
         return "search/list";                      /*String과 연관*/
     }
 
@@ -61,22 +62,28 @@ public class SearchController {
     /*삭제*/
     @GetMapping("/delete")
     public String deleteProc(Integer id){
+        searchService.delete(id);
         return "redirect:/list";
     }
 
     /*상세*/
     @GetMapping("/detail")
     public String detailProc(Integer id, Model model){
+        DetailDTO detailDTO = searchService.detail(id);
+        model.addAttribute("data",detailDTO);
         return "search/detail";
     }
 
     /*수정*/
     @GetMapping("/modify")
     public String modifyView(Integer id, Model model){
+        DetailDTO detailDTO = searchService.detail(id);
+        model.addAttribute("data",detailDTO);
         return "search/modify";
     }
     @PostMapping("/modify")
     public String modifyProc(DetailDTO detailDTO){
+        searchService.modify(detailDTO);
         return "redirect:/";
     }
 }

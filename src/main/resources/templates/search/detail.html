@@ -36,9 +36,14 @@
                         <p >날짜: <span th:text="${#temporals.format(data.modDate,'yyyy-MM-dd')}"></span></p>
                     </div>
                 </div>
-                <div class="card-footer text-center">
-                    <a th:href="@{/modify(id=${data.id})}" class="btn btn-success">수정</a>
-                    <a th:href="@{/delete(id=${data.id})}" class="btn btn-danger">삭제</a>
+                <div class="card-footer d-flex justify-content-between">
+                    <div>
+                        <button type="button" th:onclick="|location.href='@{/list}'|" class="btn btn-secondary"><i class="bi-caret-left"></i></button>
+                    </div>
+                    <div>
+                        <a th:href="@{/modify(id=${data.id})}" class="btn btn-success">수정</a>
+                        <a th:href="@{/delete(id=${data.id})}" class="btn btn-danger">삭제</a>
+                    </div>
                 </div>
             </div>
         </div><!--작업영역-->

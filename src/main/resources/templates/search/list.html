@@ -39,25 +39,27 @@
             <form th:action="@{/list}" method="get"><!--Mapping이름을 참고...-->
                 <div class="input-group mb-3">
                     <select name="type" class="form-select">
-                    <option value="">검색 조건</option>
-                    <option value="s">제목</option>
-                    <option value="c">내용</option>
-                    <option value="a">작성자</option>
-                    <option value="sc">제목+내용</option>
-                    <option value="sca">제목+내용+작성자</option>
+                        <option value="" th:selected="${type==null}">검색 조건</option>
+                        <option value="s" th:selected="${type=='s'}">제목</option>
+                        <option value="c" th:selected="${type=='c'}">내용</option>
+                        <option value="a" th:selected="${type=='a'}">작성자</option>
+                        <option value="sc" th:selected="${type=='sc'}">제목+내용</option>
+                        <option value="sca" th:selected="${type=='sca'}">제목+내용+작성자</option>
                     </select>
-                    <input class="form-control" name="keyword" type="text" placeholder="입력하세요 ...">
+                    <input class="form-control" th:value="${keyword}" name="keyword" type="text" placeholder="입력하세요 ...">
                     <button class="btn btn-info" type="submit">검색</button>
                     <button class="btn btn-secondary" type="reset">초기화</button>
+                    <button type="button" th:onclick="|location.href='@{/create}'|"
+                            class="btn btn-success">글등록</button>
                 </div>
             </form>
 
             <!--등록버튼-->
-            <div class="btns mb-3">
-                <a th:href="@{/create}" class="btn btn-success">등록</a>
-                <button type="button" th:onclick="|location.href='@{/create}'|"
-                        class="btn btn-success">등록버튼</button><!--버튼을 클릭했을 때 해당 주소로 이동. a태그보다 좀 느림...-->
-            </div>
+<!--            <div class="btns mb-3">-->
+<!--                <a th:href="@{/create}" class="btn btn-success">등록</a>-->
+<!--                <button type="button" th:onclick="|location.href='@{/create}'|"-->
+<!--                        class="btn btn-success">등록버튼</button>&lt;!&ndash;버튼을 클릭했을 때 해당 주소로 이동. a태그보다 좀 느림...&ndash;&gt;-->
+<!--            </div>-->
 
             <!--목록-->
             <table class="mb-3 table table-bordered text-center">
@@ -86,31 +88,25 @@
                     </tr>
                 </tbody>
             </table>
-
+            startPage: [[${startPage}]],  currentPage: [[${currentPage}]], endPage: [[${endPage}]]
             <!--페이지버튼-->
             <ul class="pagination justify-content-center">
-
                 <li class="page-item" th:unless="${startPage==1}">
-                    <a class="page-link" th:href="@{/board(page=1, keyword=${keyword})}"><i class="bi-caret-left-fill"></i></a>
-                </li>
-
-                <li class="page-item" th:unless="${currentPage==1}">
-                    <a class="page-link" th:href="@{/board(page=${prevPage}, keyword=${keyword})}"><i class="bi-caret-left"></i></a>
-                </li>
-
+                    <a class="page-link" th:href="@{/list(page=1, keyword=${keyword}, type=${type})}"><i class="bi-caret-left-fill"></i></a>
+                </li><!--첫페이지-->
+<!--                <li class="page-item" th:unless="${currentPage==1}">-->
+<!--                    <a class="page-link" th:href="@{/list(page=${prevPage}, keyword=${keyword}, type=${type})}"><i class="bi-caret-left"></i></a>-->
+<!--                </li>&lt;!&ndash;이전&ndash;&gt;-->
                 <li th:each="page : ${#numbers.sequence(startPage,endPage,1)}"
                     th:class="${page==currentPage}?'active page-item':'page-item'">
-                    <a class="page-link" th:href="@{/board(page=${page}, keyword=${keyword})}" th:text="${page}"></a>
-                </li>
-
-                <li class="page-item" th:unless="${endPage<=currentPage}">
-                    <a class="page-link" th:href="@{/board(page=${nextPage}, keyword=${keyword})}"><i class="bi-caret-right"></i></a>
-                </li>
-
-                <li class="page-item" th:unless="${endPage==lastPage}">
-                    <a class="page-link" th:href="@{/board(page=${lastPage}, keyword=${keyword})}"><i class="bi-caret-right-fill"></i></a>
-                </li>
-
+                    <a class="page-link" th:href="@{/list(page=${page}, keyword=${keyword}, type=${type})}" th:text="${page}"></a>
+                </li><!--숫자들-->
+                <li class="page-item" th:unless="${lastPage<=currentPage}">
+                    <a class="page-link" th:href="@{/list(page=${nextPage}, keyword=${keyword}, type=${type})}"><i class="bi-caret-right"></i></a>
+                </li><!--다음-->
+<!--                <li class="page-item" th:unless="${endPage==lastPage}">-->
+<!--                    <a class="page-link" th:href="@{/list(page=${lastPage}, keyword=${keyword}, type=${type})}"><i class="bi-caret-right-fill"></i></a>-->
+<!--                </li>&lt;!&ndash;마지막&ndash;&gt;-->
             </ul>
 
         </div><!--작업영역-->
