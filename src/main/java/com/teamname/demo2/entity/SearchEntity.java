@@ -11,6 +11,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
@@ -27,10 +28,11 @@ import java.time.LocalDateTime;
         sequenceName = "search_seq",
         initialValue = 1,       //시작값
         allocationSize = 1      //크기
-)                               //Entity와 1:1로만 사용
+)
+@EntityListeners(AuditingEntityListener.class)//Entity와 1:1로만 사용
 public class SearchEntity {
     @Id                                                 //기본키
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, //기본키의 사용방법
+    @GeneratedValue(strategy = GenerationType.IDENTITY, //기본키의 사용방법
             generator = "search_seq")                   //Sequence : 순차처리(1,2,3 ..)
                                                         // 근데 서버를 껐다 킬때마다 시작하는 번호가 달라짐.
                                                         // 불규칙하게 숫자가 생성...

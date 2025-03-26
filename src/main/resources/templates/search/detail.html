@@ -12,6 +12,38 @@
           href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
-
+<div class="container">
+    <div class="row mt-3">
+        <div class="col-1"></div><!--오른쪽여백-->
+        <div class="col-10">
+            <!--카드형식으로 폼-->
+            <div class="card mb-3">
+                <div class="card-header text-center"><b>게시글 읽기</b></div>
+                <div class="card-body">
+                    <div class="mb-3 mt-3">
+                        <p >번호: <span th:text="${data.id}"></span></p>
+                    </div>
+                    <div class="mb-3 mt-3">
+                        <p >제목: <span th:text="${data.subject}"></span></p>
+                    </div>
+                    <div class="mb-3 mt-3">
+                        <p >작성자: <span th:text="${data.author}"></span></p>
+                    </div>
+                    <div class="mb-3 mt-3">
+                        <p >내용: <span th:text="${data.content}"></span></p>
+                    </div>
+                    <div class="mb-3 mt-3">
+                        <p >날짜: <span th:text="${#temporals.format(data.modDate,'yyyy-MM-dd')}"></span></p>
+                    </div>
+                </div>
+                <div class="card-footer text-center">
+                    <a th:href="@{/modify(id=${data.id})}" class="btn btn-success">수정</a>
+                    <a th:href="@{/delete(id=${data.id})}" class="btn btn-danger">삭제</a>
+                </div>
+            </div>
+        </div><!--작업영역-->
+        <div class="col-1"></div><!--왼쪽여백-->
+    </div><!--row끝-->
+</div><!--container끝-->
 </body>
 </html>
